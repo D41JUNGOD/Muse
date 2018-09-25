@@ -1,2 +1,2 @@
 # Muse
-Music Downloader~~ Muisc is My Life~~
+Music Downloader~~ Music is My Life~~
