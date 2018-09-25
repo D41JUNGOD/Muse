@@ -2,7 +2,6 @@ import requests,re
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-
 def chart_parse():
     url = "http://www.mnet.com/chart/TOP100/"
     r = requests.get(url)
