@@ -21,7 +21,6 @@ def video(v_url):
             raise()
 
         return 1
-
     except:
         return 0
 
@@ -30,7 +29,8 @@ def video_path():
     dir_name = "Music"
     path = os.path.join(path,dir_name)
 
-    os.mkdir(path)
+    if not os.path.isdir(path):
+        os.mkdir(path)
 
     return path
 
@@ -39,10 +39,13 @@ def video_convert(path):
         clip = mp.VideoFileClip(path+".mp4")
         clip.audio.write_audiofile(path+".mp3")
 
+        clip.close()
+        os.remove(path+".mp4")
+
         return 1
 
     except:
         return 0
 
 if __name__ == '__main__':
-    video("/watch?v=LJnpwL-2Drc")
+    video("/watch?v=BzYnNdJhZQw")
