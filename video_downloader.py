@@ -1,43 +1,48 @@
-import os,subprocess
+import os
 import pytube
+import moviepy.editor as mp
 
 def video(v_url):
-    url = "https://www.youtube.com"
-    url += v_url
+    try:
+        url = "https://www.youtube.com"
+        url += v_url
 
-    yt = pytube.YouTube(url)
+        yt = pytube.YouTube(url)
+        vids = yt.streams.filter(progressive=True, file_extension='mp4').first()
 
-    #vids,vnum = video_quality(yt)
-    vids = yt.streams.all()
-    vnum = 0
+        path = video_path()
+        vids.download(path)
 
-    path = video_path()
+        video = vids.default_filename
+        video_name = video.split(".")[0]
 
-    vids[vnum].download(path)
-    video = vids[vnum].default_filename
+        path = os.path.join(path,video_name)
+        if not video_convert(path):
+            raise()
 
-    video_name,ext = video.split(".")
+        return 1
 
-    subprocess.call([
-                    'ffmpeg',
-                     '-i',
-                     os.path.join(path, video),
-                     os.path.join(path, video_name+".mp3")
-                    ],shell=True)
-
-def video_quality(yt):
-    vids = yt.streams.all()
-
-    for i in range(len(vids)):
-        print(i, '. ', vids[i])
-
-    vnum = int(input("화질 : "))
-
-    return vids,vnum
+    except:
+        return 0
 
 def video_path():
     path = os.getcwd()
+    dir_name = "Music"
+    path = os.path.join(path,dir_name)
+
+    os.mkdir(path)
+
     return path
+
+def video_convert(path):
+    try:
+        clip = mp.VideoFileClip(path+".mp4")
+        clip.audio.write_audiofile(path+".mp3")
+
+        return 1
+
+    except:
+        return 0
 
 if __name__ == '__main__':
     video("/watch?v=LJnpwL-2Drc")
