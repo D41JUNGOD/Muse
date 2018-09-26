@@ -7,21 +7,23 @@ def video(v_url):
 
     yt = pytube.YouTube(url)
 
-    vids,vnum = video_quality(yt)
+    #vids,vnum = video_quality(yt)
+    vids = yt.streams.all()
+    vnum = 0
+
     path = video_path()
 
     vids[vnum].download(path)
-    filename = vids[vnum].default_filename
+    video = vids[vnum].default_filename
 
-    print(os.path.join(path,filename))
+    video_name,ext = video.split(".")
+
     subprocess.call([
                     'ffmpeg',
                      '-i',
-                     os.path.join(path, filename),
-                     os.path.join(path, "asdf")
-                    ])
-
-    print("complete!")
+                     os.path.join(path, video),
+                     os.path.join(path, video_name+".mp3")
+                    ],shell=True)
 
 def video_quality(yt):
     vids = yt.streams.all()
@@ -30,6 +32,7 @@ def video_quality(yt):
         print(i, '. ', vids[i])
 
     vnum = int(input("화질 : "))
+
     return vids,vnum
 
 def video_path():
@@ -37,4 +40,4 @@ def video_path():
     return path
 
 if __name__ == '__main__':
-    video("/watch?v=BzYnNdJhZQw")
+    video("/watch?v=LJnpwL-2Drc")
