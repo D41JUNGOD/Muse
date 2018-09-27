@@ -72,12 +72,13 @@ class chart(QDialog, form_class):
     def lineEditInput(self):
         try:
             idx = int(self.lineEdit.text())
+
         except:
             QMessageBox.information(self, "Muse", "숫자를 입력해주세요.")
             self.close()
 
         global chart_list
-        if 0 < idx < len(chart_list):
+        if 0 < idx <= len(chart_list):
             ct = 1
             for key in chart_list:
                 if ct == idx:
@@ -85,8 +86,14 @@ class chart(QDialog, form_class):
                     break
                 ct += 1
 
-        global yt_list
+        else:
+            QMessageBox.information(self, "Muse", "잘못 입력하셨습니다.")
+            self.close()
+            return
+
+
         QMessageBox.information(self,"Muse","검색중...")
+        global yt_list
         yt_list = video_parse(search)
 
         self.close()
@@ -145,7 +152,7 @@ class youtube(QDialog, form_class):
             QMessageBox.information(self,"Muse","숫자를 입력해주세요.")
             self.close()
 
-        if 0< idx <len(yt_list):
+        if 0< idx <= len(yt_list):
             ct = 1
             for key in yt_list:
                 if ct == idx:

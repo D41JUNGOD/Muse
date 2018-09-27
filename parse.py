@@ -36,28 +36,32 @@ def chart_parse():
     return music
 
 def video_parse(search):
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    options.add_argument('window-size=1920x1080')
-    options.add_argument("disable-gpu")
+    try:
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        options.add_argument('window-size=1920x1080')
+        options.add_argument("disable-gpu")
 
-    driver = webdriver.Chrome("/Users/oonja/Downloads/Downloads/chromedriver_win32/chromedriver",chrome_options=options)
+        driver = webdriver.Chrome("/Users/oonja/Downloads/Downloads/chromedriver_win32/chromedriver",chrome_options=options)
 
-    url = "https://www.youtube.com/results?search_query="
-    url += search
+        url = "https://www.youtube.com/results?search_query="
+        url += search
 
-    driver.get(url)
-    html = driver.page_source
-    driver.close()
+        driver.get(url)
+        html = driver.page_source
+        driver.close()
 
-    soup = BeautifulSoup(html, 'html.parser')
-    video_item = soup.find("div", {"id": "contents"}). \
-        find_all("a", {"class": "yt-simple-endpoint style-scope ytd-video-renderer"})
+        soup = BeautifulSoup(html, 'html.parser')
+        video_item = soup.find("div", {"id": "contents"}). \
+            find_all("a", {"class": "yt-simple-endpoint style-scope ytd-video-renderer"})
 
-    video_list = {}
-    for video in video_item:
-        video_url = video['href']
-        video_title = video['title']
-        video_list[str(video_title)] = video_url
+        video_list = {}
+        for video in video_item:
+            video_url = video['href']
+            video_title = video['title']
+            video_list[str(video_title)] = video_url
 
-    return video_list
+        return video_list
+
+    except:
+        return 0
