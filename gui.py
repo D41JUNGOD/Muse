@@ -86,6 +86,7 @@ class chart(QDialog, form_class):
                 ct += 1
 
         global yt_list
+        QMessageBox.information(self,"Muse","검색중...")
         yt_list = video_parse(search)
 
         self.close()
@@ -108,6 +109,7 @@ class search(QDialog, form_class):
         yt_list = {}
 
         search = self.lineEdit.text()
+        QMessageBox.information(self, "Muse", "검색중...")
         yt_list = video_parse(search)
 
         self.close()
