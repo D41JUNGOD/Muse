@@ -45,6 +45,7 @@ class Main_Window(QMainWindow, form_class):
     def btn_clicked_3(self):
         self.close()
 
+
 yt_list = {}
 chart_list = {}
 form_class = uic.loadUiType("ui/Chart.ui")[0]
@@ -113,7 +114,6 @@ class search(QDialog, form_class):
 
     def lineEditInput(self):
         global yt_list
-        yt_list = {}
 
         search = self.lineEdit.text()
         QMessageBox.information(self, "Muse", "검색중...")
@@ -148,11 +148,12 @@ class youtube(QDialog, form_class):
     def lineEditInput(self):
         try:
             idx = int(self.lineEdit.text())
+
         except:
             QMessageBox.information(self,"Muse","숫자를 입력해주세요.")
             self.close()
 
-        if 0< idx <= len(yt_list):
+        if 0 < idx <= len(yt_list):
             ct = 1
             for key in yt_list:
                 if ct == idx:
@@ -161,12 +162,14 @@ class youtube(QDialog, form_class):
                 ct += 1
 
             QMessageBox.information(self,"Muse","다운중...")
+
             if not video(yt_url):
                 QMessageBox.information(self,"Muse","다운되지 않았습니다.")
                 self.close()
 
             QMessageBox.information(self, "Muse", "성공적으로 다운되었습니다.")
             self.close()
+
         else:
             QMessageBox.information(self, "Muse", "잘못 입력하셨습니다.")
             self.close()
