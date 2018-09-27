@@ -5,9 +5,8 @@ from PyQt5.QtWidgets import *
 
 from parse import chart_parse,video_parse
 from video_downloader import video
-from time import sleep
 
-import os,sys
+import sys
 import image_rc
 
 form_class = uic.loadUiType("ui/Mainwindow.ui")[0]
@@ -46,6 +45,8 @@ class Main_Window(QMainWindow, form_class):
     def btn_clicked_3(self):
         self.close()
 
+yt_list = {}
+chart_list = {}
 form_class = uic.loadUiType("ui/Chart.ui")[0]
 class chart(QDialog, form_class):
     def __init__(self):
@@ -54,11 +55,13 @@ class chart(QDialog, form_class):
         self.browser = QTextBrowser(self)
         self.browser.resize(530, 400)
         self.browser.move(25, 80)
+        self.lineEdit.returnPressed.connect(self.lineEditInput)
         self.setWindowIcon(QIcon('ui/image/muse.png'))
 
         self.pushButton.setIcon(QIcon('ui/image/icon.png'))
         self.pushButton.setIconSize(QSize(40, 40))
 
+        global chart_list
         chart_list = chart_parse()
 
         ct = 1
@@ -66,7 +69,30 @@ class chart(QDialog, form_class):
             self.browser.append(str(ct) + ". "+key+" - "+chart_list[key])
             ct += 1
 
-yt_list = {}
+    def lineEditInput(self):
+        try:
+            idx = int(self.lineEdit.text())
+        except:
+            QMessageBox.information(self, "Muse", "숫자를 입력해주세요.")
+            self.close()
+
+        global chart_list
+        if 0 < idx < len(chart_list):
+            ct = 1
+            for key in chart_list:
+                if ct == idx:
+                    search = key + " " + chart_list[key]
+                    break
+                ct += 1
+
+        global yt_list
+        yt_list = video_parse(search)
+
+        self.close()
+
+        yt = youtube()
+        yt.exec()
+
 form_class = uic.loadUiType("ui/input_search.ui")[0]
 class search(QDialog, form_class):
     def __init__(self):
@@ -79,6 +105,7 @@ class search(QDialog, form_class):
 
     def lineEditInput(self):
         global yt_list
+        yt_list = {}
 
         search = self.lineEdit.text()
         yt_list = video_parse(search)
@@ -88,11 +115,8 @@ class search(QDialog, form_class):
         yt = youtube()
         yt.exec()
 
-
-
 form_class = uic.loadUiType("ui/Youtube.ui")[0]
 class youtube(QDialog, form_class):
-    global yt_list
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -105,6 +129,7 @@ class youtube(QDialog, form_class):
         self.pushButton.setIcon(QIcon('ui/image/icon.png'))
         self.pushButton.setIconSize(QSize(40, 40))
 
+        global yt_list
 
         ct = 1
         for key in yt_list:

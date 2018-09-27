@@ -36,7 +36,12 @@ def chart_parse():
     return music
 
 def video_parse(search):
-    driver = webdriver.Chrome("/Users/oonja/Downloads/Downloads/chromedriver_win32/chromedriver")
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    options.add_argument('window-size=1920x1080')
+    options.add_argument("disable-gpu")
+
+    driver = webdriver.Chrome("/Users/oonja/Downloads/Downloads/chromedriver_win32/chromedriver",chrome_options=options)
 
     url = "https://www.youtube.com/results?search_query="
     url += search
